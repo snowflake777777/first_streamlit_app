@@ -42,3 +42,6 @@ my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
 my_data_row = my_cur.fetchone()
 streamlit.text("Hello from Snowflake:")
 streamlit.text(my_data_row)
+
+pip install --upgrade urllib3
+pip install urllib3==1.26.7
