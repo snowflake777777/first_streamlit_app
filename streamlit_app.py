@@ -37,13 +37,19 @@ streamlit.dataframe(fruityvice_normalized)
 import snowflake.connector
 import streamlit
 
+conn_params = streamlit.secrets["snowflake"]
+
 try:
-    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    my_cnx = snowflake.connector.connect(**conn_params)
     my_cur = my_cnx.cursor()
     my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
     my_data_row = my_cur.fetchone()
     streamlit.text("Hello from Snowflake:")
     streamlit.text(my_data_row)
+except snowflake.connector.errors.DatabaseError as e:
+    error_code = e.errno
+    error_msg = e.msg
+    streamlit.error(f"Snowflake Database Error (Code {error_code}): {error_msg}")
 except Exception as e:
     streamlit.error(f"Error connecting to Snowflake: {e}")
 
